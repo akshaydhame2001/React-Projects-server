@@ -63,9 +63,6 @@ app.get("/events/images", async (req, res) => {
 app.get("/events/:id", async (req, res) => {
   const { id } = req.params;
 
-  const eventsFileContent = await fs.readFile("./data/events.json");
-  const events = JSON.parse(eventsFileContent);
-
   const event = events.find((event) => event.id === id);
 
   if (!event) {
@@ -99,17 +96,12 @@ app.post("/events", async (req, res) => {
     return res.status(400).json({ message: "Invalid data provided." });
   }
 
-  const eventsFileContent = await fs.readFile("./data/events.json");
-  const events = JSON.parse(eventsFileContent);
-
   const newEvent = {
     id: Math.round(Math.random() * 10000).toString(),
     ...event,
   };
 
   events.push(newEvent);
-
-  await fs.writeFile("./data/events.json", JSON.stringify(events));
 
   res.json({ event: newEvent });
 });
@@ -133,9 +125,6 @@ app.put("/events/:id", async (req, res) => {
     return res.status(400).json({ message: "Invalid data provided." });
   }
 
-  const eventsFileContent = await fs.readFile("./data/events.json");
-  const events = JSON.parse(eventsFileContent);
-
   const eventIndex = events.findIndex((event) => event.id === id);
 
   if (eventIndex === -1) {
@@ -147,8 +136,6 @@ app.put("/events/:id", async (req, res) => {
     ...event,
   };
 
-  await fs.writeFile("./data/events.json", JSON.stringify(events));
-
   setTimeout(() => {
     res.json({ event: events[eventIndex] });
   }, 1000);
@@ -157,9 +144,6 @@ app.put("/events/:id", async (req, res) => {
 app.delete("/events/:id", async (req, res) => {
   const { id } = req.params;
 
-  const eventsFileContent = await fs.readFile("./data/events.json");
-  const events = JSON.parse(eventsFileContent);
-
   const eventIndex = events.findIndex((event) => event.id === id);
 
   if (eventIndex === -1) {
@@ -167,8 +151,6 @@ app.delete("/events/:id", async (req, res) => {
   }
 
   events.splice(eventIndex, 1);
-
-  await fs.writeFile("./data/events.json", JSON.stringify(events));
 
   setTimeout(() => {
     res.json({ message: "Event deleted" });
