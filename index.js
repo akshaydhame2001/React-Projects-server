@@ -21,10 +21,16 @@ app.use((req, res, next) => {
   next();
 });
 
+// Parse events data from environment variable
+const events = JSON.parse(process.env.EVENTS_JSON);
+
+// Parse images data from environment variable
+const images = JSON.parse(process.env.IMAGES_JSON);
+
 app.get("/events", async (req, res) => {
   const { max, search } = req.query;
-  const eventsFileContent = await fs.readFile("./data/events.json");
-  let events = JSON.parse(eventsFileContent);
+  // const eventsFileContent = await fs.readFile("./data/events.json");
+  // let events = JSON.parse(eventsFileContent);
 
   if (search) {
     events = events.filter((event) => {
@@ -49,9 +55,6 @@ app.get("/events", async (req, res) => {
 });
 
 app.get("/events/images", async (req, res) => {
-  const imagesFileContent = await fs.readFile("./data/images.json");
-  const images = JSON.parse(imagesFileContent);
-
   res.json({ images });
 });
 
