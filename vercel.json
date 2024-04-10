@@ -8,13 +8,7 @@
   ],
   "routes": [
     {
-      "src": "/events/(.*)",
-      "status": 200,
-      "dest": "/events"
-    },
-    {
       "src": "/(.*)",
-      "status": 200,
       "dest": "/"
     }
   ]
