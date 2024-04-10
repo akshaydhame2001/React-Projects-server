@@ -34,19 +34,23 @@ app.get("/events", async (req, res) => {
   // const eventsFileContent = await fs.readFile("./data/events.json");
   // let events = JSON.parse(eventsFileContent);
 
+  let filteredEvents = [...events]; // Create a copy of the events array
+
   if (search) {
-    events = events.filter((event) => {
+    const searchTerm = search.trim().toLowerCase();
+    filteredEvents = filteredEvents.filter((event) => {
       const searchableText = `${event.title} ${event.description} ${event.location}`;
-      return searchableText.toLowerCase().includes(search.toLowerCase());
+      return searchableText.toLowerCase().includes(searchTerm);
     });
   }
 
   if (max) {
-    events = events.slice(events.length - max, events.length);
+    const maxCount = parseInt(max, 10); // Parse max as an integer
+    filteredEvents = filteredEvents.slice(-maxCount); // Take the last maxCount events
   }
 
   res.json({
-    events: events.map((event) => ({
+    events: filteredEvents.map((event) => ({
       id: event.id,
       title: event.title,
       image: event.image,
